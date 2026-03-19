@@ -113,7 +113,7 @@ pub async fn run_trading_loop(config: Config) -> Result<()> {
                                 stop_loss: None,
                                 take_profit: None,
                                 timestamp_ms: chrono::Utc::now().timestamp_millis(),
-                                market_type: "FUTURES".to_string(),
+                                market_type: "SPOT".to_string(),
                                 price: None,
                                 post_only: false,
                             };

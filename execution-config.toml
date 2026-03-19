@@ -5,6 +5,7 @@ symbols = ["BTCUSDT", "ETHUSDT"]
 
 [binance]
 testnet = true
+market_type = "FUTURE"
 # api_key = "your-testnet-api-key"
 # api_secret = "your-testnet-api-secret"
 

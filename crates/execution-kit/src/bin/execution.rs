@@ -212,18 +212,15 @@ async fn execute_order(
 
     // Place order on Binance
     let base_url = if config.binance.testnet {
-        // Check if trading futures (symbol ends with USDT and market_type is FUTURES)
         if cmd.market_type == "FUTURES" {
-            "https://demo-fapi.binance.com"      // Futures demo (new testnet)
+            "https://testnet.binancefuture.com"  // Futures testnet
         } else {
             "https://testnet.binance.vision"     // Spot testnet
         }
+    } else if cmd.market_type == "FUTURES" {
+        "https://fapi.binance.com"               // Futures mainnet
     } else {
-        if cmd.market_type == "FUTURES" {
-            "https://fapi.binance.com"           // Futures mainnet
-        } else {
-            "https://api.binance.com"            // Spot mainnet
-        }
+        "https://api.binance.com"                // Spot mainnet
     };
 
     let api_key = config.binance.api_key.as_ref()
@@ -231,46 +228,59 @@ async fn execute_order(
     let api_secret = config.binance.api_secret.as_ref()
         .ok_or_else(|| anyhow::anyhow!("Binance API secret not configured"))?;
 
-    // Create order parameters with owned Strings
-    let mut params: HashMap<String, String> = HashMap::new();
-    params.insert("symbol".to_string(), cmd.symbol.clone());
-    params.insert("side".to_string(), cmd.side.clone());
-    params.insert("type".to_string(), cmd.order_type.clone());
-    params.insert("quantity".to_string(), cmd.quantity.to_string());
-    params.insert("newOrderRespType".to_string(), "FULL".to_string());
-    
-    if cmd.order_type == "LIMIT" {
-        if let Some(price) = cmd.price {
-            params.insert("price".to_string(), price.to_string());
-            params.insert("timeInForce".to_string(), "GTC".to_string());
-        }
-    }
-
-    // Add signature
+    // Build params as query string (NOT HashMap - order matters for signature)
+    // Binance requires signature to match exact query string
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)?
         .as_millis() as i64;
-    params.insert("timestamp".to_string(), timestamp.to_string());
+    
+    // Build params string - order matches library client
+    let mut params_str = format!(
+        "symbol={}&side={}&type={}&quantity={}&timestamp={}&recvWindow=5000",
+        cmd.symbol, cmd.side, cmd.order_type, cmd.quantity, timestamp
+    );
+    
+    // Add LIMIT order specific params
+    if cmd.order_type == "LIMIT" {
+        if let Some(price) = cmd.price {
+            params_str.push_str(&format!("&price={}", price));
+        }
+        params_str.push_str("&timeInForce=GTC");
+    }
+    
+    // Add client order ID for tracking (before newOrderRespType like library client)
+    let client_order_id = format!("zeroclaw_{}", timestamp);
+    params_str.push_str(&format!("&newClientOrderId={}", client_order_id));
+    
+    // Add newOrderRespType for post_only orders
+    if cmd.post_only {
+        params_str.push_str("&newOrderRespType=FULL");
+    }
 
-    let params_str = serialize_params(&params);
-    let signature = hmac_sha256(api_secret, &params_str);
-    params.insert("signature".to_string(), signature);
-
-    // Place order
-    // Use correct endpoint for Futures vs Spot
+    // Trim whitespace from secret key (common issue with env vars)
+    let api_secret_trimmed = api_secret.trim();
+    
+    // Compute HMAC-SHA256 signature on the exact params string
+    let signature = hmac_sha256(api_secret_trimmed, &params_str);
+    
+    // Build final URL with all params + signature in query string
     let order_endpoint = if cmd.market_type == "FUTURES" {
         "/fapi/v1/order"
     } else {
         "/api/v3/order"
     };
-    let url = format!("{}{}", base_url, order_endpoint);
     
-    info!("📤 Placing order: {} {} {} on {}", cmd.symbol, cmd.side, cmd.quantity, url);
+    let url = format!("{}{}?{}&signature={}", base_url, order_endpoint, params_str, signature);
     
+    info!("📤 Placing order: {} {} {} on {}", cmd.symbol, cmd.side, cmd.quantity, base_url);
+    info!("📤 Params string: {}", params_str);
+    info!("📤 Signature: {}", signature);
+    debug!("📤 Order URL: {}", url);
+    
+    // Send POST request with params in query string (Binance requires this for signed requests)
     let response = http_client
         .post(&url)
-        .header("X-MBX-APIKEY", api_key)
-        .form(&params)
+        .header("X-MBX-APIKEY", api_key.trim())
         .send()
         .await?;
 
@@ -368,12 +378,3 @@ fn hmac_sha256(secret: &str, message: &str) -> String {
     encode(mac.finalize().into_bytes())
 }
 
-fn serialize_params(params: &HashMap<String, String>) -> String {
-    let mut pairs: Vec<_> = params.iter().collect();
-    pairs.sort_by(|a, b| a.0.cmp(b.0));
-    pairs
-        .iter()
-        .map(|(k, v)| format!("{}={}", k, v))
-        .collect::<Vec<_>>()
-        .join("&")
-}
