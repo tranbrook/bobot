@@ -1,0 +1,31 @@
+# Blue Chip Crypto Campaign
+# Conservative strategy for BTC and ETH only
+
+[campaign]
+name = "blue-chip"
+description = "Conservative BTC and ETH trading"
+enabled = true
+
+symbols = ["BTCUSDT", "ETHUSDT"]
+symbol_intervals = { "BTCUSDT" = "1m", "ETHUSDT" = "1m" }
+default_interval = "1m"
+
+[strategies]
+trend_following = true
+trend_following_weight = 0.6
+mean_reversion = true
+mean_reversion_weight = 0.4
+
+[risk]
+# Conservative risk
+max_total_position_usd = 8000.0
+max_per_symbol_usd = 4000.0
+max_daily_trades = 16
+max_daily_trades_per_symbol = 8
+emergency_pnl_threshold = -3.0
+max_single_symbol_ratio = 0.5
+
+[correlation]
+enabled = false
+max_correlation_threshold = 0.8
+max_correlated_symbols = 2

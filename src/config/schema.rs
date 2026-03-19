@@ -232,6 +232,10 @@ pub struct Config {
     /// Text-to-Speech configuration (`[tts]`).
     #[serde(default)]
     pub tts: TtsConfig,
+
+    /// Trading configuration for AI-powered trading decisions (`[trading]`).
+    #[serde(default)]
+    pub trading: crate::config::trading::TradingConfig,
 }
 
 /// Named provider profile definition compatible with Codex app-server style config.
@@ -3885,6 +3889,7 @@ impl Default for Config {
             query_classification: QueryClassificationConfig::default(),
             transcription: TranscriptionConfig::default(),
             tts: TtsConfig::default(),
+            trading: crate::config::trading::TradingConfig::default(),
         }
     }
 }

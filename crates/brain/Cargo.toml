@@ -1,0 +1,42 @@
+[package]
+name = "zeroclaw-brain"
+version = "0.1.0"
+edition = "2021"
+authors = ["theonlyhennygod"]
+license = "MIT OR Apache-2.0"
+description = "AI Decision Layer for ZeroClaw - consumes Muscle signals and dispatches execution commands"
+repository = "https://github.com/zeroclaw-labs/zeroclaw"
+
+[dependencies]
+# Internal crates
+zeroclaw-common = { path = "../common" }
+zeroclaw-muscle-kit = { path = "../muscle-kit" }
+
+# Async traits
+async-trait = "0.1"
+
+# Async runtime
+tokio = { version = "1.50", features = ["rt-multi-thread", "macros", "time", "sync", "rt"] }
+
+# Redis async client
+redis = { version = "0.29", features = ["aio", "tokio-comp", "connection-manager"] }
+
+# HTTP client for LLM API
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["std"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+
+# Logging
+tracing = { version = "0.1", default-features = false }
+
+# Time
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+
+# JSON Schema for LLM output validation
+schemars = "1.2"

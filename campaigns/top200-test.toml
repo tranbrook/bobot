@@ -1,0 +1,127 @@
+# Top 200 Coins Campaign - High Signal Frequency
+# Designed for testing with maximum signal generation
+
+name = "top200-test"
+description = "Test campaign with 200 top coins for maximum signal frequency"
+enabled = true
+
+# Top 200 coins by market cap (Binance USDS-M Futures)
+symbols = [
+    # Top 10 - Mega Cap
+    "BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT",
+    "ADAUSDT", "AVAXUSDT", "DOGEUSDT", "TRXUSDT", "LINKUSDT",
+    
+    # Top 20 - Large Cap
+    "MATICUSDT", "DOTUSDT", "LTCUSDT", "SHIBUSDT", "BCHUSDT",
+    "ATOMUSDT", "UNIUSDT", "XLMUSDT", "ETCUSDT", "NEARUSDT",
+    
+    # Top 30 - Mid-Large Cap
+    "FILUSDT", "APTUSDT", "ICPUSDT", "VETUSDT", "ALGOUSDT",
+    "HBARUSDT", "QNTUSDT", "SANDUSDT", "MANAUSDT", "AAVEUSDT",
+    
+    # Top 40 - Mid Cap
+    "GRTUSDT", "THETAUSDT", "AXSUSDT", "EGLDUSDT", "FTMUSDT",
+    "XTZUSDT", "FLOWUSDT", "CHZUSDT", "EOSUSDT", "KLAYUSDT",
+    
+    # Top 50
+    "MKRUSDT", "ZECUSDT", "DASHUSDT", "NEOUSDT", "IOTAUSDT",
+    "BATUSDT", "ENJUSDT", "ZILUSDT", "WAVESUSDT", "OMGUSDT",
+    
+    # Top 60
+    "COMPUSDT", "YFIUSDT", "SNXUSDT", "CRVUSDT", "SUSHIUSDT",
+    "1INCHUSDT", "RENUSDT", "KNCUSDT", "LRCUSDT", "STORJUSDT",
+    
+    # Top 70
+    "ANKRUSDT", "BANDUSDT", "NMRUSDT", "RLCUSDT", "OCEANUSDT",
+    "CVCUSDT", "KAVAUSDT", "IOTXUSDT", "ONTUSDT", "ZRXUSDT",
+    
+    # Top 80
+    "ICXUSDT", "SCUSDT", "DGBUSDT", "RVNUSDT", "BTGUSDT",
+    "LSKUSDT", "NANOUSDT", "STEEMUSDT", "BTSUSDT", "XEMUSDT",
+    
+    # Top 90
+    "STRATUSDT", "ARKUSDT", "KMDUSDT", "PIVXUSDT", "VIAUSDT",
+    "SYSUSDT", "BLOCKUSDT", "NXSUSDT", "DCRUSDT", "GBXUSDT",
+    
+    # Top 100
+    "GASUSDT", "QTUMUSDT", "SNTUSDT", "POWRUSDT", "REQUSDT",
+    "VIBUSDT", "TRIGUSDT", "APPCUSDT", "VIBESUSDT", "BRDUSDT",
+    
+    # Top 110
+    "EDOUSDT", "IOTXUSDT", "FETUSDT", "ONEUSDT", "TFUELUSDT",
+    "CELRUSDT", "MFTUSDT", "KEYUSDT", "STORMUSDT", "DOCKUSDT",
+    
+    # Top 120
+    "WANUSDT", "FUNUSDT", "CVCUSDT", "CHZUSDT", "BANDUSDT",
+    "BUSDUSDT", "BEAMUSDT", "XTZUSDT", "RENUSDT", "RVNUSDT",
+    
+    # Top 130
+    "HCUSDT", "HBARUSDT", "NKNUSDT", "STXUSDT", "KAVAUSDT",
+    "ARPAUSDT", "IOTXUSDT", "RLCUSDT", "MCOUSDT", "CTXCUSDT",
+    
+    # Top 140
+    "BCHUSDT", "TROYUSDT", "VITEUSDT", "FTTUSDT", "EURUSDT",
+    "OGNUSDT", "DREPUSDT", "BULLUSDT", "BEARUSDT", "ETHBULLUSDT",
+    
+    # Top 150
+    "ETHBEARUSDT", "TCTUSDT", "WRXUSDT", "BTSUSDT", "LSKUSDT",
+    "BNTUSDT", "LTOUSDT", "USDCUSDT", "ATOMUSDT", "PHBUSDT",
+    
+    # Top 160
+    "ALLUSDT", "MBLUSDT", "COTIUSDT", "STPTUSDT", "WTCUSDT",
+    "DATAUSDT", "XZCUSDT", "SOLUSDT", "CTSIUSDT", "HIVEUSDT",
+    
+    # Top 170
+    "CHRUSDT", "BTCUPUSDT", "BTCDOWNUSDT", "GXSUSDT", "ARDRUSDT",
+    "LENDUSDT", "MDTUSDT", "STMXUSDT", "KNCUSDT", "REPUSDT",
+    
+    # Top 180
+    "LRCUSDT", "PNTUSDT", "COMPUSDT", "BKRWUSDT", "SCUSDT",
+    "ZENUSDT", "SNXUSDT", "ETHUPUSDT", "ETHDOWNUSDT", "ADAUPUSDT",
+    
+    # Top 190
+    "ADADOWNUSDT", "LINKUPUSDT", "LINKDOWNUSDT", "VTHOUSDT",
+    "DGBUSDT", "GBPUSDT", "SXPUSDT", "MKRUSDT", "DAIUSDT", "DCRUSDT",
+    
+    # Top 200
+    "STORJUSDT", "BNBUPUSDT", "BNBDOWNUSDT", "XTZUPUSDT", "XTZDOWNUSDT",
+    "AVAXUSDT", "YFIUSDT", "BALUSDT", "BLZUSDT", "IRISUSDT"
+]
+
+# Use 5m interval for better signal frequency
+default_interval = "5m"
+
+# Symbol-specific intervals (override default)
+# Major coins get 1m for faster signals
+[symbol_intervals]
+BTCUSDT = "1m"
+ETHUSDT = "1m"
+BNBUSDT = "1m"
+SOLUSDT = "1m"
+XRPUSDT = "1m"
+
+[strategies]
+# Enable both strategies for maximum signal generation
+trend_following = true
+trend_following_weight = 0.5
+mean_reversion = true
+mean_reversion_weight = 0.5
+
+[risk]
+# Very low risk for testing
+max_total_position_usd = 1000.0
+max_per_symbol_usd = 5.0
+max_daily_trades = 1000
+max_daily_trades_per_symbol = 10
+emergency_pnl_threshold = -50.0
+max_single_symbol_ratio = 0.1
+
+[correlation]
+enabled = false
+max_correlation_threshold = 0.9
+max_correlated_symbols = 50
+
+[signal_thresholds]
+# Lower thresholds for easier signal generation
+min_confluence_score = 3
+strong_signal_threshold = 5

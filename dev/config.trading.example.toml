@@ -1,0 +1,130 @@
+# ZeroClaw Trading Configuration Example
+# Copy this file to ~/.zeroclaw/config.toml and customize for your needs
+
+# =============================================================================
+# Provider Configuration
+# =============================================================================
+
+[provider]
+# AI provider for trading decisions: "anthropic", "openai", "openrouter", "ollama"
+default_provider = "anthropic"
+default_model = "claude-sonnet-4-20250514"
+api_key = "your-api-key-here"  # Or use ZEROCLAW_API_KEY env var
+
+# =============================================================================
+# Trading Configuration
+# =============================================================================
+
+[trading]
+# Enable trading integration
+enabled = true
+
+# Symbols to monitor
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+
+# Check interval in milliseconds
+check_interval_ms = 5000
+
+# Redis URL
+redis_url = "redis://localhost:6379"
+
+# Provider settings for trading decisions
+[trading.provider]
+name = "anthropic"
+model = "claude-sonnet-4-20250514"
+temperature = 0.7
+max_tokens = 1000
+timeout_secs = 30
+
+# Risk management
+[trading.risk]
+max_leverage = 10
+max_risk_per_trade = 0.02        # 2% of account
+max_daily_trades = 20
+max_drawdown_percent = 5.0       # 5% max drawdown
+min_confluence_score = 5         # Minimum signal strength
+
+# Safety checks
+[trading.safety]
+require_llm_reasoning = true
+validate_decision_format = true
+max_latency_ms = 500
+override_leverage_max = 5        # Override if LLM suggests > 5x
+
+# Memory settings
+[trading.memory]
+enabled = true
+store_decisions = true
+store_signals = true
+recall_limit = 10
+
+# Custom system prompt for trading decisions
+[trading.prompt]
+system_prompt = """You are a professional cryptocurrency trader with 10+ years of experience.
+You specialize in technical analysis and risk management.
+
+Rules:
+1. Never risk more than 2% per trade
+2. Always use stop loss
+3. Only trade when confluence score >= 7
+4. Prefer trending markets (ADX > 25)
+5. Avoid trading during high volatility unless regime is clearly trending
+
+Return decisions in JSON format with clear reasoning."""
+
+# =============================================================================
+# Monitoring & Alerting
+# =============================================================================
+
+[trading.monitor]
+health_check_interval_secs = 30
+metrics_flush_interval_secs = 60
+
+# Pushover alerts
+[trading.monitor.alert]
+pushover_enabled = false
+pushover_token = "your-pushover-token"
+pushover_user_key = "your-pushover-user-key"
+
+# Telegram alerts
+telegram_enabled = true
+telegram_bot_token = "your-telegram-bot-token"
+telegram_chat_id = "your-telegram-chat-id"
+
+# Alert thresholds
+pnl_alert_threshold = 2.0         # Alert on 2% PnL move
+drawdown_alert_threshold = 3.0    # Alert on 3% drawdown
+daily_trade_warning = 15          # Warn at 15 trades/day
+
+# =============================================================================
+# Gateway Configuration
+# =============================================================================
+
+[gateway]
+port = 42617
+host = "127.0.0.1"
+allow_public_bind = false
+
+# =============================================================================
+# Memory Configuration
+# =============================================================================
+
+[memory]
+# Backend: "sqlite", "markdown", "none"
+backend = "sqlite"
+auto_save = true
+
+# =============================================================================
+# Security Configuration
+# =============================================================================
+
+[security]
+# Supervision level: "read_only", "supervised", "full"
+autonomy_level = "supervised"
+
+# =============================================================================
+# Redis Configuration (for Muscle-Kit integration)
+# =============================================================================
+
+# Note: Redis must be running for trading integration
+# Start Redis: redis-server --daemonize yes

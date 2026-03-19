@@ -1,0 +1,61 @@
+[package]
+name = "zeroclaw-execution-kit"
+version = "0.1.0"
+edition = "2021"
+authors = ["theonlyhennygod"]
+license = "MIT OR Apache-2.0"
+description = "Binance Spot & Futures execution engine for ZeroClaw"
+repository = "https://github.com/zeroclaw-labs/zeroclaw"
+
+[dependencies]
+# Internal crates
+zeroclaw-common = { path = "../common" }
+
+# Async traits
+async-trait = "0.1"
+
+# Async runtime
+tokio = { version = "1.50", features = ["rt-multi-thread", "macros", "time", "sync", "rt", "signal"] }
+
+# CLI
+clap = { version = "4.5", features = ["derive"] }
+
+# Logging
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+
+# HTTP client
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+# WebSocket
+tokio-tungstenite = { version = "0.28", features = ["rustls-tls-webpki-roots"] }
+
+# Redis
+redis = { version = "0.29", features = ["aio", "tokio-comp", "connection-manager"] }
+
+# HMAC-SHA256 for Binance signature
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["std"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+
+# Time
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+
+# Logging
+tracing = { version = "0.1", default-features = false }
+
+# URL encoding
+urlencoding = "2.1"
+
+# Environment variables
+dotenvy = "0.15"
+
+# Config parsing
+toml = "0.8"

@@ -115,9 +115,29 @@ pub async fn run(config: Config, host: String, port: u16) -> Result<()> {
         tracing::info!("Cron disabled; scheduler supervisor not started");
     }
 
+    // Trading component (when enabled)
+    let mut components_list = vec!["gateway", "channels", "heartbeat", "scheduler"];
+    if config.trading.enabled {
+        let trading_cfg = config.clone();
+        handles.push(spawn_component_supervisor(
+            "trading",
+            initial_backoff,
+            max_backoff,
+            move || {
+                let cfg = trading_cfg.clone();
+                async move { crate::agent::trading::run_trading_loop(cfg).await }
+            },
+        ));
+        components_list.push("trading");
+        tracing::info!("Trading component enabled: symbols={:?}", config.trading.symbols);
+    } else {
+        crate::health::mark_component_ok("trading");
+        tracing::info!("Trading disabled");
+    }
+
     println!("🧠 ZeroClaw daemon started");
     println!("   Gateway:  http://{host}:{port}");
-    println!("   Components: gateway, channels, heartbeat, scheduler");
+    println!("   Components: {}", components_list.join(", "));
     println!("   Ctrl+C or SIGTERM to stop");
 
     // Wait for shutdown signal (SIGINT or SIGTERM)

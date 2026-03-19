@@ -1,0 +1,48 @@
+# Top 50 Coins Campaign - Fast Testing
+# Optimized for quick signal generation testing
+
+name = "top50-fast-test"
+description = "Fast test campaign with 50 volatile coins for maximum signals"
+enabled = true
+
+# Top 50 most volatile coins (higher chance of signals)
+symbols = [
+    # High volatility - more signals
+    "BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT",
+    "ADAUSDT", "AVAXUSDT", "DOGEUSDT", "MATICUSDT", "DOTUSDT",
+    "LTCUSDT", "SHIBUSDT", "BCHUSDT", "ATOMUSDT", "UNIUSDT",
+    "LINKUSDT", "ETCUSDT", "NEARUSDT", "FILUSDT", "APTUSDT",
+    "ICPUSDT", "VETUSDT", "ALGOUSDT", "HBARUSDT", "SANDUSDT",
+    "MANAUSDT", "AAVEUSDT", "GRTUSDT", "THETAUSDT", "AXSUSDT",
+    "EGLDUSDT", "FTMUSDT", "XTZUSDT", "FLOWUSDT", "CHZUSDT",
+    "EOSUSDT", "KLAYUSDT", "MKRUSDT", "ZECUSDT", "DASHUSDT",
+    "NEOUSDT", "IOTAUSDT", "ENJUSDT", "ZILUSDT", "WAVESUSDT",
+    "COMPUSDT", "YFIUSDT", "SNXUSDT", "CRVUSDT", "SUSHIUSDT"
+]
+
+# Use 1m interval for maximum signal frequency
+default_interval = "1m"
+
+[strategies]
+# Enable both strategies with equal weight
+trend_following = true
+trend_following_weight = 0.5
+mean_reversion = true
+mean_reversion_weight = 0.5
+
+[risk]
+# Very low risk for testing
+max_total_position_usd = 500.0
+max_per_symbol_usd = 10.0
+max_daily_trades = 500
+max_daily_trades_per_symbol = 20
+emergency_pnl_threshold = -20.0
+max_single_symbol_ratio = 0.2
+
+[correlation]
+enabled = false
+
+[signal_thresholds]
+# Very low thresholds for easy signal generation
+min_confluence_score = -10
+strong_signal_threshold = 4

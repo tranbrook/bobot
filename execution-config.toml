@@ -1,0 +1,14 @@
+# Execution-Kit Configuration
+
+redis_url = "redis://127.0.0.1:6379"
+symbols = ["BTCUSDT", "ETHUSDT"]
+
+[binance]
+testnet = true
+# api_key = "your-testnet-api-key"
+# api_secret = "your-testnet-api-secret"
+
+[risk]
+max_position_size_usd = 1000.0
+max_daily_trades = 20
+emergency_pnl_threshold = -5.0

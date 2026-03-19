@@ -1,5 +1,6 @@
 pub mod schema;
 pub mod traits;
+pub mod trading;
 
 #[allow(unused_imports)]
 pub use schema::{
@@ -19,6 +20,8 @@ pub use schema::{
     StorageProviderSection, StreamMode, TelegramConfig, TranscriptionConfig, TtsConfig,
     TunnelConfig, WebFetchConfig, WebSearchConfig, WebhookConfig,
 };
+
+pub use trading::{TradingConfig, TradingProviderConfig, TradingMemoryConfig, TradingPromptConfig};
 
 pub fn name_and_presence<T: traits::ChannelConfig>(channel: Option<&T>) -> (&'static str, bool) {
     (T::name(), channel.is_some())

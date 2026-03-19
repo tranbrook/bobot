@@ -27,6 +27,7 @@ pub mod cron_run;
 pub mod cron_runs;
 pub mod cron_update;
 pub mod delegate;
+pub mod execution_bridge;
 pub mod file_edit;
 pub mod file_read;
 pub mod file_write;
@@ -40,6 +41,7 @@ pub mod hardware_memory_map;
 pub mod hardware_memory_read;
 pub mod http_request;
 pub mod image_info;
+pub mod market_analyzer;
 pub mod memory_forget;
 pub mod memory_recall;
 pub mod memory_store;
@@ -52,10 +54,12 @@ pub mod schema;
 pub mod screenshot;
 pub mod shell;
 pub mod traits;
+pub mod trading_decision;
 pub mod web_fetch;
 pub mod web_search_tool;
 
 pub use browser::{BrowserTool, ComputerUseConfig};
+pub use trading_decision::{TradingDecisionTool, TradingDecisionToolConfig};
 pub use browser_open::BrowserOpenTool;
 pub use composio::ComposioTool;
 pub use content_search::ContentSearchTool;
@@ -66,6 +70,7 @@ pub use cron_run::CronRunTool;
 pub use cron_runs::CronRunsTool;
 pub use cron_update::CronUpdateTool;
 pub use delegate::DelegateTool;
+pub use execution_bridge::ExecutionBridgeTool;
 pub use file_edit::FileEditTool;
 pub use file_read::FileReadTool;
 pub use file_write::FileWriteTool;
@@ -79,6 +84,7 @@ pub use hardware_memory_map::HardwareMemoryMapTool;
 pub use hardware_memory_read::HardwareMemoryReadTool;
 pub use http_request::HttpRequestTool;
 pub use image_info::ImageInfoTool;
+pub use market_analyzer::MarketAnalyzerTool;
 pub use memory_forget::MemoryForgetTool;
 pub use memory_recall::MemoryRecallTool;
 pub use memory_store::MemoryStoreTool;
@@ -239,7 +245,22 @@ pub fn all_tools_with_runtime(
             security.clone(),
             workspace_dir.to_path_buf(),
         )),
+        Arc::new(MarketAnalyzerTool::new("redis://localhost:6379")),
+        Arc::new(ExecutionBridgeTool::new("redis://localhost:6379")),
     ];
+
+    // Add trading decision tool when trading is enabled
+    if root_config.trading.enabled {
+        let trading_config = TradingDecisionToolConfig {
+            redis_url: root_config.trading.redis_url.clone(),
+            symbols: root_config.trading.symbols.clone(),
+            check_interval_ms: root_config.trading.check_interval_ms,
+            safety: root_config.trading.safety.clone(),
+        };
+        if let Ok(tool) = TradingDecisionTool::new(trading_config) {
+            tool_arcs.push(Arc::new(tool));
+        }
+    }
 
     if browser_config.enabled {
         // Add legacy browser_open tool for simple URL opening

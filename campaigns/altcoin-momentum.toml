@@ -1,0 +1,31 @@
+# Altcoin Momentum Campaign
+# Aggressive strategy for altcoins
+
+[campaign]
+name = "altcoin-momentum"
+description = "Momentum trading for SOL, BNB, ADA"
+enabled = true
+
+symbols = ["SOLUSDT", "BNBUSDT", "ADAUSDT"]
+symbol_intervals = { "SOLUSDT" = "5m", "BNBUSDT" = "5m", "ADAUSDT" = "5m" }
+default_interval = "5m"
+
+[strategies]
+trend_following = true
+trend_following_weight = 0.8
+mean_reversion = false
+mean_reversion_weight = 0.0
+
+[risk]
+# Higher risk for altcoins
+max_total_position_usd = 6000.0
+max_per_symbol_usd = 2000.0
+max_daily_trades = 24
+max_daily_trades_per_symbol = 8
+emergency_pnl_threshold = -8.0
+max_single_symbol_ratio = 0.4
+
+[correlation]
+enabled = true
+max_correlation_threshold = 0.7
+max_correlated_symbols = 2

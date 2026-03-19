@@ -1,0 +1,37 @@
+# Crypto Momentum Campaign
+# Multi-symbol trend following strategy
+
+name = "crypto-momentum"
+description = "Momentum strategy for BTC, ETH, and SOL"
+enabled = true
+
+# Multiple symbols in one campaign
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+
+# Different intervals for different symbols
+symbol_intervals = { "BTCUSDT" = "1m", "ETHUSDT" = "1m", "SOLUSDT" = "5m" }
+default_interval = "1m"
+
+[strategies]
+trend_following = true
+trend_following_weight = 0.7
+mean_reversion = false
+mean_reversion_weight = 0.0
+
+[risk]
+# Total risk for entire campaign
+max_total_position_usd = 10000.0
+# Risk per symbol
+max_per_symbol_usd = 3000.0
+# Daily limits
+max_daily_trades = 30
+max_daily_trades_per_symbol = 10
+# Emergency stop
+emergency_pnl_threshold = -5.0
+# No single symbol should dominate
+max_single_symbol_ratio = 0.5
+
+[correlation]
+enabled = false
+max_correlation_threshold = 0.8
+max_correlated_symbols = 2
