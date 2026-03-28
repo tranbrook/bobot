@@ -28,7 +28,7 @@ tokio-tungstenite = { version = "0.28", features = ["rustls-tls-webpki-roots"] }
 # Data Engine - Polars for high-performance DataFrame operations
 polars = { version = "0.46", features = ["lazy", "dtype-full", "temporal", "rolling_window", "performant"] }
 polars-lazy = "0.46"
-polars-core = "0.46"
+polars-core = "0.53"
 polars-ops = "0.46"
 
 # State Store - Redis async client
