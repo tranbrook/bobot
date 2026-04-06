@@ -15,10 +15,10 @@ zeroclaw-common = { path = "../common" }
 async-trait = "0.1"
 
 # Async runtime
-tokio = { version = "1.50", features = ["rt-multi-thread", "macros", "time", "sync", "rt", "signal"] }
+tokio = { version = "1.51", features = ["rt-multi-thread", "macros", "time", "sync", "rt", "signal"] }
 
 # CLI
-clap = { version = "4.5", features = ["derive"] }
+clap = { version = "4.6", features = ["derive"] }
 
 # Logging
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
