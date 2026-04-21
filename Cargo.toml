@@ -101,7 +101,7 @@ ring = "0.17"
 prost = { version = "0.14", default-features = false, features = ["derive"], optional = true }
 
 # Redis for Muscle-Kit integration
-redis = { version = "0.29", features = ["aio", "tokio-comp"] }
+redis = { version = "1.2", features = ["aio", "tokio-comp"] }
 
 # zeroclaw-common for shared types with muscle-kit
 zeroclaw-common = { path = "crates/common" }
