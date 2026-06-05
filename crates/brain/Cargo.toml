@@ -16,7 +16,7 @@ zeroclaw-muscle-kit = { path = "../muscle-kit" }
 async-trait = "0.1"
 
 # Async runtime
-tokio = { version = "1.50", features = ["rt-multi-thread", "macros", "time", "sync", "rt"] }
+tokio = { version = "1.52", features = ["rt-multi-thread", "macros", "time", "sync", "rt"] }
 
 # Redis async client
 redis = { version = "0.29", features = ["aio", "tokio-comp", "connection-manager"] }
